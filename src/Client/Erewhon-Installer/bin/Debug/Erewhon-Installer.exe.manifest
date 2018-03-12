@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="Erewhon-Installer.exe" version="0.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Erewhon-Installer" version="0.0.0.19" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Erewhon-Installer.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          Options du manifeste de contrôle de compte d’utilisateur (UAC)
+          Si vous voulez changer le niveau de contrôle de compte d’utilisateur Windows, remplacez le 
+          nœud requestedExecutionLevel par l’un des nœuds suivants.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         Si vous voulez utiliser la virtualisation de fichiers système et du Registre pour la 
+         compatibilité descendante, supprimez le nœud requestedExecutionLevel.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="4" minorVersion="10" buildNumber="0" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="2.0.50727.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Erewhon-Installer.exe" size="3296704">
+      <assemblyIdentity name="Erewhon-Installer" version="0.0.0.19" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>C2+NBNIdFe2m3R5/jbNbabDYd+Q=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="Utopia\Assets\ball\ball.mtl" size="508">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>xmh4PEnVIY6ndh6+foHfAd5mb+U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\ball\ball.obj" size="806528">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ALcXvbHlrNyFou2JooNjMlEqFkk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\cursor\orientation.png" size="2180">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Ve3Ucs4YqfJpYFvbh6s2wV13AO4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\earth\earthmap1k.jpg" size="344080">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>LPno7u5tNyQBvHVGkLKiBo2cMgI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\particles\fire_particle.png" size="37144">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>U0SwOxjEWce0vXJs7iqyHA6+rrg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_back6.png" size="1575317">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>cfu6fUQptl29wM6rj5pHczQBmC0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_bottom4.png" size="1869750">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>R2A70eqDZaE7RkHqUSCBpy0frnU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_front5.png" size="1892256">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>3rW3gfgr5ky0+lD1AuGx3RetqJM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_left2.png" size="1569060">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>uUbetZgaaIbc0ABeXid2WUt/qcU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_right1.png" size="1981064">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Vr16q6b4u918mIUedR8y+N/0BEA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\purple_nebula_skybox\purple_nebula_skybox_top3.png" size="2227555">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>k1o1abtrVCdM2us052pHpy+GHYw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\sounds\laserTurretlow.ogg" size="16685">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>vZb0Py8/az2OJJURcQkueQfwblc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\sounds\laserTurretlow.wav" size="193994">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>67fJ4c91b5J/9Jnok0HWsBQss9w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\readme.txt" size="63">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>dp6fRoTHMeZRQgFLFPXkstZ9TjI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\spaceship.mtl" size="346">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>SiHfmHINGz3gWfCooVK/AAZeHKc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\spaceship.obj" size="1345975">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>dmDX5Ss7pdcTXU8XPTxsCNMYRnQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\Texture\diffuse.png" size="945237">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>/Y7mgOxFn/5jK95xYK0wzajZRG0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\Texture\glass.png" size="71456">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>a0RZ9hvv+7A0ldMpePBd8duoBBI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\spaceship\Texture\normal.png" size="1602695">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Up9/K6eHr4pJS8U1IlJGcTCRrbc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\weapons\crosshair.png" size="29717">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>9Dqa1EjtRTQoaGXZa7sLBqlGLqQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Assets\weapons\LaserBeam.png" size="38239">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>XjFM8Ogj7IIu0SxaLoK37rq2fkc=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\botscript.lua" size="2131">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>cHFkoaG1y6y60zk3zKxmsid470g=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\cconfig.lua" size="479">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>MN3o8VbMdZGrA83e7Y71BWLy+6w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\ErewhonClient.exe" size="517632">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>g9LIBD/fR8xm5B/SER9R9YSCjjk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\libeay32.dll" size="1662976">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>0B83ylxn9Vn7EtUGencs5Igikvg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\libiconv-2.dll" size="1690490">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>1/od7BOWR+LJFjCPIhKUhhsSzBI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\libintl-8.dll" size="685747">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>LVa7navebpVOo5XcZnWrmRia8BM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\libpq.dll" size="281600">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>bdaA+52jwUqRNBo3f0D1DYOfW4c=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\libsndfile-1.dll" size="2375168">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>VG+TPBvHyqVsD9YTYbV35TTuQHU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraAudio.dll" size="107521">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>X3pYb+DDaHP9FtRFIL80TeFD18E=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraCore.dll" size="369665">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>WdHW7jLH+zh+PuEQ9McBHcpvE0w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraGraphics.dll" size="722433">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>pI5XaNd8gVlsHXoSLG37dsYs318=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraLua.dll" size="218113">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ZSbuZ17ZB4bFYFjp1gDZMcmEI4s=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraNetwork.dll" size="231937">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>966rMJji/C5itJNdjXRtMxJldhk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraNoise.dll" size="47617">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>UwHfYXkvzl45w4TDfiYd8lIjbWw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraPhysics2D.dll" size="235009">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>cgvz5PKkjmFSSeFkSVwNuSJRyh0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraPhysics3D.dll" size="85505">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>SBigwM/3AGOB4c2uU0qm7vSd3xE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraPlatform.dll" size="82433">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>2cRVcQQ/ZuHnpKGLTILxqsczSX0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraRenderer.dll" size="436225">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>m1taayLGa+xAsUB6Y6KovmCSFFk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraSDK.dll" size="1864705">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>vFhsR1CODzb8fIirJ8kZpCdLtsk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraSDKServer.dll" size="957953">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>X21Tk1klI/IY8+dwBmNM7bvYLq8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\NazaraUtility.dll" size="1545729">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ORAnOtUJwi0UWpwUNZ2ag2ZwVp4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\Newton.dll" size="1154561">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>9osfUdUvmuKSgR1pYKZvCVE1n1I=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\readme.txt" size="199">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>yXw8QJWgDSBbrVWCZskWVO4+kes=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\soft_oal.dll" size="797305">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>m2a8mfqmiMFR6HG7WvJycIib2/g=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\spacelib.lua" size="10000">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>kjyTRAZoNY+wV37OhgRzc8vN9ZU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\spaceshipcontroller.lua" size="14142">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>NWw0t+r6Xuc8DTRGVhOOcvHahJA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Utopia\ssleay32.dll" size="352256">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>B/b5m6EBBbOnFdnQhHJsf4PNyi0=</dsig:DigestValue>
+    </hash>
+  </file>
+</asmv1:assembly>
