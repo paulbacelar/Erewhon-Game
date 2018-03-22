@@ -21,6 +21,7 @@ namespace ewn
 			BaseApplication() = default;
 			virtual ~BaseApplication();
 
+			inline ConfigFile& GetConfig();
 			inline const ConfigFile& GetConfig() const;
 			inline std::size_t GetPeerPerReactor() const;
 			inline std::size_t GetReactorCount() const;
@@ -29,7 +30,7 @@ namespace ewn
 
 			virtual bool Run() = 0;
 
-			void SetupNetwork(std::size_t clientPerReactor, const Nz::IpAddress& ipAddress);
+			bool SetupNetwork(std::size_t clientPerReactor, const Nz::IpAddress& ipAddress);
 
 			static inline Nz::UInt64 GetAppTime();
 

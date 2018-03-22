@@ -30,6 +30,8 @@ namespace ewn
 			void OnConnected(ServerConnection* server, Nz::UInt32 data);
 			void OnConnectionPressed();
 			void OnDisconnected(ServerConnection* server, Nz::UInt32 data);
+			void OnQuitPressed();
+			void OnOptionPressed();
 			void OnRegisterPressed();
 
 			void ComputePassword();
@@ -45,6 +47,8 @@ namespace ewn
 
 			StateData& m_stateData;
 			Ndk::ButtonWidget* m_connectionButton;
+			Ndk::ButtonWidget* m_optionButton;
+			Ndk::ButtonWidget* m_quitButton;
 			Ndk::ButtonWidget* m_registerButton;
 			Ndk::CheckboxWidget* m_rememberCheckbox;
 			Ndk::LabelWidget* m_loginLabel;
@@ -55,6 +59,7 @@ namespace ewn
 			std::future<std::string> m_passwordFuture;
 			bool m_loginSucceeded;
 			bool m_isLoggingIn;
+			bool m_isUsingOption;
 			bool m_isRegistering;
 			float m_loginAccumulator;
 	};
