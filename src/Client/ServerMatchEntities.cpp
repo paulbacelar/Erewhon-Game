@@ -5,9 +5,12 @@
 #include <Client/ServerMatchEntities.hpp>
 #include <Nazara/Core/Clock.hpp>
 #include <Nazara/Core/Primitive.hpp>
+#include <Nazara/Graphics/Billboard.hpp>
 #include <Nazara/Graphics/Model.hpp>
 #include <Nazara/Graphics/TextSprite.hpp>
 #include <Nazara/Utility/SimpleTextDrawer.hpp>
+#include <Nazara/Utility/StaticMesh.hpp>
+#include <Nazara/Utility/VertexMapper.hpp>
 #include <NDK/Components.hpp>
 #include <Client/ClientApplication.hpp>
 #include <iostream>
@@ -123,7 +126,8 @@ namespace ewn
 			if (m_debugStateSocket.ReceivePacket(&packet, nullptr))
 			{
 				Packets::ArenaState arenaState;
-				Packets::Serialize(PacketSerializer(packet, false), arenaState);
+				PacketSerializer serializer(packet, false);
+				Packets::Serialize(serializer, arenaState);
 
 				for (auto& serverData : arenaState.entities)
 				{
@@ -198,9 +202,7 @@ namespace ewn
 			physComponent.SetLinearDamping(0.f);
 
 			auto& earthNode = m_earthTemplateEntity->AddComponent<Ndk::NodeComponent>();
-			earthNode.SetPosition(Nz::Vector3f::Forward() * 50.f);
-			earthNode.SetRotation(Nz::EulerAnglesf(0.f, 180.f, 0.f));
-			earthNode.SetScale(20.f);
+			earthNode.SetScale(20'000.f);
 
 			m_earthTemplateEntity->Disable();
 		}
@@ -225,74 +227,46 @@ namespace ewn
 
 			Nz::SpriteRef laserSprite2 = Nz::Sprite::New(*laserSprite1);
 
-			m_projectileTemplateEntity = m_world->CreateEntity();
-			auto& gfxComponent = m_projectileTemplateEntity->AddComponent<Ndk::GraphicsComponent>();
+			m_plasmaProjectileTemplateEntity = m_world->CreateEntity();
+			auto& gfxComponent = m_plasmaProjectileTemplateEntity->AddComponent<Ndk::GraphicsComponent>();
 			
 			gfxComponent.Attach(laserSprite1, Nz::Matrix4f::Transform(Nz::Vector3f::Backward() * 2.5f, Nz::EulerAnglesf(0.f, 90.f, 0.f)));
 			gfxComponent.Attach(laserSprite2, Nz::Matrix4f::Transform(Nz::Vector3f::Backward() * 2.5f, Nz::EulerAnglesf(90.f, 90.f, 0.f)));
 
 			//m_projectileTemplateEntity->AddComponent<Ndk::CollisionComponent3D>(Nz::CapsuleCollider3D::New(4.f, 0.5f, Nz::Vector3f::Zero(), Nz::EulerAnglesf(0.f, 90.f, 0.f)));
-			m_projectileTemplateEntity->AddComponent<Ndk::NodeComponent>();
-			m_projectileTemplateEntity->Disable();
+			m_plasmaProjectileTemplateEntity->AddComponent<Ndk::NodeComponent>();
+			m_plasmaProjectileTemplateEntity->Disable();
 
-			auto& physComponent = m_projectileTemplateEntity->AddComponent<Ndk::PhysicsComponent3D>();
+			auto& physComponent = m_plasmaProjectileTemplateEntity->AddComponent<Ndk::PhysicsComponent3D>();
 			physComponent.EnableNodeSynchronization(false);
 			physComponent.SetMass(1.f);
 			physComponent.SetAngularDamping(Nz::Vector3f(0.f));
 			physComponent.SetLinearDamping(0.f);
+		}
 
-			/*std::vector<Nz::Vector3f> vertices;
+		// Projectile (torpedo)
+		{
+			m_torpedoProjectileTemplateEntity = m_world->CreateEntity();
+			auto& gfxComponent = m_torpedoProjectileTemplateEntity->AddComponent<Ndk::GraphicsComponent>();
 
-			Nz::CapsuleCollider3D capsuleMerde(4.f, 0.5f, Nz::Vector3f::Zero(), Nz::EulerAnglesf(0.f, 90.f, 0.f));
+			Nz::MaterialRef flareMaterial = Nz::Material::New("Translucent3D");
+			flareMaterial->SetShader("Basic");
+			flareMaterial->SetDiffuseMap("Assets/weapons/flare1.png");
 
-			auto ForEachPolygon = [](void* const userData, int vertexCount, const dFloat* const faceArray, int faceId)
-			{
-				std::vector<Nz::Vector3f>& linesTruc = *(static_cast<decltype(&vertices)>(userData));
+			Nz::BillboardRef billboard = Nz::Billboard::New();
+			billboard->SetMaterial(flareMaterial);
+			billboard->SetSize(billboard->GetSize() * 0.025f);
 
-				auto Convert = [](Nz::Vector3f pos) -> Nz::Vector3f
-				{
-					return pos;
-				};
+			gfxComponent.Attach(billboard);
 
-				for (int i = 0; i < vertexCount - 1; ++i)
-				{
-					linesTruc.emplace_back(Convert(Nz::Vector3f(&faceArray[i * 3])));
-					linesTruc.emplace_back(Convert(Nz::Vector3f(&faceArray[(i + 1) * 3])));
-				}
+			m_torpedoProjectileTemplateEntity->AddComponent<Ndk::NodeComponent>();
+			m_torpedoProjectileTemplateEntity->Disable();
 
-				linesTruc.emplace_back(Convert(Nz::Vector3f(&faceArray[(vertexCount - 1) * 3])));
-				linesTruc.emplace_back(Convert(Nz::Vector3f(&faceArray[0])));
-			};
-
-			Nz::PhysWorld3D& physWorld = m_stateData.world3D->GetSystem<Ndk::PhysicsSystem3D>().GetWorld();
-
-			Nz::Matrix4f identity = Nz::Matrix4f::Identity();
-			forEachPolygonInCollision(capsuleMerde.GetHandle(&physWorld), identity, ForEachPolygon, &vertices);
-
-
-			Nz::VertexBufferRef vb = Nz::VertexBuffer::New(Nz::VertexDeclaration::Get(Nz::VertexLayout_XYZ), vertices.size(), Nz::DataStorage_Hardware, 0U);
-			vb->Fill(vertices.data(), 0, vertices.size());
-
-			Nz::MeshRef debugMesh = Nz::Mesh::New();
-			debugMesh->CreateStatic();
-			debugMesh->SetMaterialCount(1);
-
-			Nz::StaticMeshRef staticMesh = Nz::StaticMesh::New(debugMesh);
-			staticMesh->Create(vb);
-			staticMesh->SetPrimitiveMode(Nz::PrimitiveMode_LineList);
-			staticMesh->SetMaterialIndex(0);
-			staticMesh->GenerateAABB();
-
-			debugMesh->AddSubMesh(staticMesh);
-
-			Nz::MaterialRef debugMat = Nz::Material::New();
-			debugMat->SetShader("Basic");
-
-			Nz::ModelRef debugModel = Nz::Model::New();
-			debugModel->SetMesh(debugMesh);
-			debugModel->SetMaterial(0, debugMat);
-
-			gfxComponent.Attach(debugModel);*/
+			auto& physComponent = m_torpedoProjectileTemplateEntity->AddComponent<Ndk::PhysicsComponent3D>();
+			physComponent.EnableNodeSynchronization(false);
+			physComponent.SetMass(1.f);
+			physComponent.SetAngularDamping(Nz::Vector3f(0.f));
+			physComponent.SetLinearDamping(0.f);
 		}
 
 		// Spaceship
@@ -315,6 +289,53 @@ namespace ewn
 			spaceshipPhys.SetMass(42.f);
 			spaceshipPhys.SetAngularDamping(Nz::Vector3f(0.f));
 			spaceshipPhys.SetLinearDamping(0.f);
+
+
+			/*Nz::MeshRef mesh = spaceshipModel->GetMesh();
+
+			Nz::VertexMapper vertexMapper(mesh->GetSubMesh(0), Nz::BufferAccess_ReadOnly);
+			Nz::SparsePtr<Nz::Vector3f> vertexPtr = vertexMapper.GetComponentPtr<Nz::Vector3f>(Nz::VertexComponent_Position);
+
+			auto collider = Nz::ConvexCollider3D::New(vertexPtr, vertexMapper.GetVertexCount(), 0.01f);
+
+			vertexMapper.Unmap();
+
+			std::vector<Nz::Vector3f> vertices;
+			collider->ForEachPolygon([&](const float* positions, std::size_t vertexCount)
+			{
+				for (std::size_t i = 0; i < vertexCount - 1; ++i)
+				{
+					vertices.emplace_back(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
+					vertices.emplace_back(positions[(i + 1) * 3 + 0], positions[(i + 1) * 3 + 1], positions[(i + 1) * 3 + 2]);
+				}
+
+				vertices.emplace_back(positions[(vertexCount - 1) * 3 + 0], positions[(vertexCount - 1) * 3 + 1], positions[(vertexCount - 1) * 3 + 2]);
+				vertices.emplace_back(positions[0], positions[1], positions[2]);
+			});
+
+			Nz::VertexBufferRef vb = Nz::VertexBuffer::New(Nz::VertexDeclaration::Get(Nz::VertexLayout_XYZ), verticesLol.size(), Nz::DataStorage_Hardware, 0U);
+			vb->Fill(vertices.data(), 0, vertices.size());
+
+			Nz::MeshRef debugMesh = Nz::Mesh::New();
+			debugMesh->CreateStatic();
+			debugMesh->SetMaterialCount(1);
+
+			Nz::StaticMeshRef staticMesh = Nz::StaticMesh::New(debugMesh);
+			staticMesh->Create(vb);
+			staticMesh->SetPrimitiveMode(Nz::PrimitiveMode_LineList);
+			staticMesh->SetMaterialIndex(0);
+			staticMesh->GenerateAABB();
+
+			debugMesh->AddSubMesh(staticMesh);
+
+			Nz::MaterialRef debugMat = Nz::Material::New();
+			debugMat->SetShader("Basic");
+
+			Nz::ModelRef debugModel = Nz::Model::New();
+			debugModel->SetMesh(debugMesh);
+			debugModel->SetMaterial(0, debugMat);
+
+			m_spaceshipTemplateEntity->GetComponent<Ndk::GraphicsComponent>().Attach(debugModel);*/
 
 			m_spaceshipTemplateEntity->Disable();
 		}
@@ -378,9 +399,14 @@ namespace ewn
 			data.entity = m_ballTemplateEntity->Clone();
 			data.type = Type::Ball; //< Remove asap
 		}
-		else if (createPacket.entityType == "projectile")
+		else if (createPacket.entityType == "plasmabeam")
 		{
-			data.entity = m_projectileTemplateEntity->Clone();
+			data.entity = m_plasmaProjectileTemplateEntity->Clone();
+			data.type = Type::Projectile; //< Remove asap
+		}
+		else if (createPacket.entityType == "torpedo")
+		{
+			data.entity = m_torpedoProjectileTemplateEntity->Clone();
 			data.type = Type::Projectile; //< Remove asap
 		}
 		else
