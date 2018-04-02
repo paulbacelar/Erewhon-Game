@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -18,6 +18,8 @@ namespace ewn
 #define OutgoingCommand(Type, Flags, Channel) RegisterOutgoingCommand<Packets::Type>(#Type, Flags, Channel)
 
 		// Incoming commands
+		IncomingCommand(ArenaModels);
+		IncomingCommand(ArenaPrefabs);
 		IncomingCommand(ArenaState);
 		IncomingCommand(BotMessage);
 		IncomingCommand(ChatMessage);
@@ -27,6 +29,7 @@ namespace ewn
 		IncomingCommand(IntegrityUpdate);
 		IncomingCommand(LoginFailure);
 		IncomingCommand(LoginSuccess);
+		IncomingCommand(NetworkStrings);
 		IncomingCommand(RegisterFailure);
 		IncomingCommand(RegisterSuccess);
 		IncomingCommand(TimeSyncResponse);

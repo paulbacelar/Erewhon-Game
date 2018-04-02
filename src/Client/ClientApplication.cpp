@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -12,20 +12,7 @@ namespace ewn
 {
 	ClientApplication::ClientApplication()
 	{
-		m_config.RegisterStringOption("ClientScript.Filename");
-		m_config.RegisterStringOption("ServerScript.Filename");
-
-		m_config.RegisterBoolOption("Options.Fullscreen");
-		m_config.RegisterBoolOption("Options.VerticalSync");
-
-		m_config.RegisterIntegerOption("Security.Argon2.IterationCost");
-		m_config.RegisterIntegerOption("Security.Argon2.MemoryCost");
-		m_config.RegisterIntegerOption("Security.Argon2.ThreadCost");
-		m_config.RegisterIntegerOption("Security.HashLength");
-		m_config.RegisterStringOption("Security.PasswordSalt");
-
-		m_config.RegisterStringOption("Server.Address");
-		m_config.RegisterIntegerOption("Server.Port", 1, 0xFFFF);
+		RegisterConfig();
 	}
 
 	ClientApplication::~ClientApplication() = default;
@@ -40,14 +27,23 @@ namespace ewn
 		Nz::UInt16 port = m_config.GetIntegerOption<Nz::UInt16>("Server.Port");
 
 		Nz::ResolveError resolveError = Nz::ResolveError_NoError;
-		std::vector<Nz::HostnameInfo> results = Nz::IpAddress::ResolveHostname(Nz::NetProtocol_IPv4, serverHostname, Nz::String::Number(port), &resolveError);
+		std::vector<Nz::HostnameInfo> results = Nz::IpAddress::ResolveHostname(Nz::NetProtocol_Any, serverHostname, Nz::String::Number(port), &resolveError);
 		if (results.empty())
 		{
 			std::cerr << "Failed to resolve server hostname: " << Nz::ErrorToString(resolveError) << std::endl;
 			return false;
 		}
 
-		std::size_t newPeerId = GetReactor(0)->ConnectTo(results.front().address, data);
+		Nz::IpAddress serverAddress = results.front().address;
+
+		// TODO: Improve network handling
+		if (GetReactorCount() == 0 && !SetupNetwork(1, serverAddress.GetProtocol(), 0))
+		{
+			std::cerr << "Failed to setup network" << std::endl;
+			return false;
+		}
+		
+		std::size_t newPeerId = GetReactor(0)->ConnectTo(serverAddress, data);
 		if (newPeerId == NetworkReactor::InvalidPeerId)
 		{
 			std::cerr << "Failed to allocate new peer" << std::endl;
@@ -80,4 +76,25 @@ namespace ewn
 	{
 		m_servers[peerId]->DispatchIncomingPacket(std::move(packet));
 	}
+
+	void ClientApplication::RegisterConfig()
+	{
+		m_config.RegisterStringOption("AssetsFolder");
+
+		m_config.RegisterStringOption("ClientScript.Filename");
+		m_config.RegisterStringOption("ServerScript.Filename");
+
+		m_config.RegisterBoolOption("Options.Fullscreen");
+		m_config.RegisterBoolOption("Options.VerticalSync");
+
+		m_config.RegisterIntegerOption("Security.Argon2.IterationCost");
+		m_config.RegisterIntegerOption("Security.Argon2.MemoryCost");
+		m_config.RegisterIntegerOption("Security.Argon2.ThreadCost");
+		m_config.RegisterIntegerOption("Security.HashLength");
+		m_config.RegisterStringOption("Security.PasswordSalt");
+
+		m_config.RegisterStringOption("Server.Address");
+		m_config.RegisterIntegerOption("Server.Port", 1, 0xFFFF);
+	}
+
 }

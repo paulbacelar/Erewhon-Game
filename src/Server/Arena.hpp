@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Server" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -34,6 +34,8 @@ namespace ewn
 
 		public:
 			Arena(ServerApplication* app);
+			Arena(const Arena&) = delete;
+			Arena(Arena&&) = delete;
 			~Arena();
 
 			const Ndk::EntityHandle& CreatePlayerSpaceship(Player* owner);
@@ -48,6 +50,9 @@ namespace ewn
 
 			void Update(float elapsedTime);
 
+			Arena& operator=(const Arena&) = delete;
+			Arena& operator=(Arena&&) = delete;
+
 		private:
 			const Ndk::EntityHandle& CreateEntity(std::string type, std::string name, Player* owner, const Nz::Vector3f& position, const Nz::Quaternionf& rotation);
 			const Ndk::EntityHandle& CreateSpaceship(std::string name, Player* owner, std::size_t spaceshipHullId, const Nz::Vector3f& position, const Nz::Quaternionf& rotation);
@@ -60,6 +65,8 @@ namespace ewn
 			void OnBroadcastEntityCreation(const BroadcastSystem* system, const Packets::CreateEntity& packet);
 			void OnBroadcastEntityDestruction(const BroadcastSystem* system, const Packets::DeleteEntity& packet);
 			void OnBroadcastStateUpdate(const BroadcastSystem* system, Packets::ArenaState& statePacket);
+
+			void SendArenaData(Player* player);
 
 			Nz::UdpSocket m_debugSocket;
 			Ndk::EntityOwner m_attractionPoint;

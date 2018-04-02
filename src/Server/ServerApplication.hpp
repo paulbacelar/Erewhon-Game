@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Server" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -8,6 +8,7 @@
 #define EREWHON_SERVER_APPLICATION_HPP
 
 #include <Shared/BaseApplication.hpp>
+#include <Shared/Protocol/NetworkStringStore.hpp>
 #include <Nazara/Core/MemoryPool.hpp>
 #include <Server/Arena.hpp>
 #include <Server/GameWorker.hpp>
@@ -17,6 +18,7 @@
 #include <Server/Store/CollisionMeshStore.hpp>
 #include <Server/Store/ModuleStore.hpp>
 #include <Server/Store/SpaceshipHullStore.hpp>
+#include <Server/Store/VisualMeshStore.hpp>
 #include <optional>
 #include <vector>
 
@@ -42,6 +44,7 @@ namespace ewn
 			inline const CollisionMeshStore& GetCollisionMeshStore() const;
 			inline ModuleStore& GetModuleStore();
 			inline const ModuleStore& GetModuleStore() const;
+			inline const NetworkStringStore& GetNetworkStringStore() const;
 			inline SpaceshipHullStore& GetSpaceshipHullStore();
 			inline const SpaceshipHullStore& GetSpaceshipHullStore() const;
 
@@ -77,14 +80,19 @@ namespace ewn
 
 			void OnConfigLoaded(const ConfigFile& config) override;
 
+			void RegisterConfigOptions();
+			void RegisterNetworkedStrings();
+
 			std::vector<Player*> m_players;
+			std::vector<std::unique_ptr<Arena>> m_arenas;
 			Nz::MemoryPool m_playerPool;
-			Arena m_arena;
 			CallbackQueue m_callbackQueue;
 			CollisionMeshStore m_collisionMeshStore;
 			ModuleStore m_moduleStore;
+			NetworkStringStore m_stringStore;
 			ServerChatCommandStore m_chatCommandStore;
 			SpaceshipHullStore m_spaceshipHullStore;
+			VisualMeshStore m_visualMeshStore;
 			WorkerQueue m_workerQueue;
 			std::optional<GlobalDatabase> m_globalDatabase;
 			std::vector<std::unique_ptr<GameWorker>> m_workers;

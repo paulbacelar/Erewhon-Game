@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -60,11 +60,7 @@ int main()
 	}
 
 	const ewn::ConfigFile& config = app.GetConfig();
-	
-	Nz::IpAddress listenAddress = Nz::IpAddress::AnyIpV4;
-	listenAddress.SetPort(config.GetIntegerOption<Nz::UInt16>("Game.Port"));
-
-	if (!app.SetupNetwork(config.GetIntegerOption<std::size_t>("Game.MaxClients"), listenAddress))
+	if (!app.SetupNetwork(config.GetIntegerOption<std::size_t>("Game.MaxClients"), Nz::NetProtocol_Any, config.GetIntegerOption<Nz::UInt16>("Game.Port")))
 	{
 		std::cerr << "Failed to setup network" << std::endl;
 		return EXIT_FAILURE;

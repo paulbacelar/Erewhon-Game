@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -58,7 +58,10 @@ namespace ewn
 		m_onEntityCreatedSlot.Connect(m_matchEntities->OnEntityCreated, this, &GameState::OnEntityCreated);
 		m_onEntityDeletionSlot.Connect(m_matchEntities->OnEntityDelete, this, &GameState::OnEntityDelete);
 
-		stateData.server->SendPacket(Packets::JoinArena());
+		Packets::JoinArena arenaPacket;
+		arenaPacket.arenaIndex = 0;
+
+		stateData.server->SendPacket(arenaPacket);
 	}
 
 	void GameState::Leave(Ndk::StateMachine& fsm)

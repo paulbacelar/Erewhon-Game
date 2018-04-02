@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Server" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -25,6 +25,8 @@ namespace ewn
 			~CollisionMeshStore() = default;
 
 			inline Nz::Collider3DRef GetEntryCollider(std::size_t entryId) const;
+			inline std::size_t GetEntryCount() const;
+			inline const std::string& GetEntryFilePath(std::size_t entryId) const;
 			inline bool IsEntryLoaded(std::size_t entryId) const;
 
 		private:
@@ -33,6 +35,7 @@ namespace ewn
 			struct CollisionMeshInfo 
 			{
 				Nz::Collider3DRef collider;
+				std::string filePath;
 				bool doesExist = false;
 				bool isLoaded = false;
 			};

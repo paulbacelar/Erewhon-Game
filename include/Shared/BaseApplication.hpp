@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -30,7 +30,7 @@ namespace ewn
 
 			virtual bool Run() = 0;
 
-			bool SetupNetwork(std::size_t clientPerReactor, const Nz::IpAddress& ipAddress);
+			bool SetupNetwork(std::size_t clientPerReactor, Nz::NetProtocol protocol, Nz::UInt16 port);
 
 			static inline Nz::UInt64 GetAppTime();
 

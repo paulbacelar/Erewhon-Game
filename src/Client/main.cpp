@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -35,11 +35,6 @@ int main()
 	const ewn::ConfigFile& config = app.GetConfig();
 
 	app.EnableFPSCounter(true);
-	if (!app.SetupNetwork(1, Nz::IpAddress::LoopbackIpV4))
-	{
-		std::cerr << "Failed to setup network" << std::endl;
-		return EXIT_FAILURE;
-	}
 
 	ewn::ServerConnection serverConnection(app);
 
@@ -78,19 +73,20 @@ int main()
 	canvas.SetSize(Nz::Vector2f(window.GetSize()));
 
 	// Resources
+	std::string assetsFolder = config.GetStringOption("AssetsFolder");
 
 	// Loading skybox
-	if (Nz::Directory::Exists("Assets/purple_nebula_skybox"))
+	if (Nz::Directory::Exists(assetsFolder + "/purple_nebula_skybox"))
 	{
 		Nz::TextureRef background = Nz::Texture::New();
 		if (background->Create(Nz::ImageType_Cubemap, Nz::PixelFormatType_RGBA8, 2048, 2048))
 		{
-			background->LoadFaceFromFile(Nz::CubemapFace_PositiveX, "Assets/purple_nebula_skybox/purple_nebula_skybox_right1.png");
-			background->LoadFaceFromFile(Nz::CubemapFace_PositiveY, "Assets/purple_nebula_skybox/purple_nebula_skybox_top3.png");
-			background->LoadFaceFromFile(Nz::CubemapFace_PositiveZ, "Assets/purple_nebula_skybox/purple_nebula_skybox_front5.png");
-			background->LoadFaceFromFile(Nz::CubemapFace_NegativeX, "Assets/purple_nebula_skybox/purple_nebula_skybox_left2.png");
-			background->LoadFaceFromFile(Nz::CubemapFace_NegativeY, "Assets/purple_nebula_skybox/purple_nebula_skybox_bottom4.png");
-			background->LoadFaceFromFile(Nz::CubemapFace_NegativeZ, "Assets/purple_nebula_skybox/purple_nebula_skybox_back6.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_PositiveX, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_right1.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_PositiveY, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_top3.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_PositiveZ, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_front5.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_NegativeX, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_left2.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_NegativeY, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_bottom4.png");
+			background->LoadFaceFromFile(Nz::CubemapFace_NegativeZ, assetsFolder + "/purple_nebula_skybox/purple_nebula_skybox_back6.png");
 		}
 
 		Nz::TextureLibrary::Register("Background", std::move(background));
@@ -101,7 +97,7 @@ int main()
 	soundParams.forceMono = true;
 
 	Nz::SoundBufferRef shootSound = Nz::SoundBuffer::New();
-	if (!shootSound->LoadFromFile("Assets/sounds/laserTurretlow.ogg", soundParams))
+	if (!shootSound->LoadFromFile(assetsFolder + "/sounds/laserTurretlow.ogg", soundParams))
 		std::cerr << "Failed to load shoot sound" << std::endl;
 
 	Nz::SoundBufferLibrary::Register("ShootSound", std::move(shootSound));

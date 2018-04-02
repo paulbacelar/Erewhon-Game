@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -21,13 +21,13 @@ namespace ewn
 		return Application::Run();
 	}
 
-	bool BaseApplication::SetupNetwork(std::size_t clientPerReactor, const Nz::IpAddress& ipAddress)
+	bool BaseApplication::SetupNetwork(std::size_t clientPerReactor, Nz::NetProtocol protocol, Nz::UInt16 port)
 	{
 		m_peerPerReactor = clientPerReactor;
 
 		try
 		{
-			m_reactors.emplace_back(std::make_unique<NetworkReactor>(0, ipAddress, clientPerReactor));
+			m_reactors.emplace_back(std::make_unique<NetworkReactor>(0, protocol, port, clientPerReactor));
 			return true;
 		}
 		catch (const std::exception& e)

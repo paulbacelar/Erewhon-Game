@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -19,5 +19,12 @@ namespace ewn
 	Nz::UInt64 ServerConnection::EstimateServerTime() const
 	{
 		return ClientApplication::GetAppTime() + m_deltaTime;
+	}
+
+	void ServerConnection::UpdateNetworkStrings(ServerConnection* server, const Packets::NetworkStrings& data)
+	{
+		assert(server == this);
+
+		m_stringStore.FillStore(data.startId, std::move(data.strings));
 	}
 }

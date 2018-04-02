@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Server" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -120,11 +120,11 @@ namespace ewn
 		auto& nodeComponent = entity->GetComponent<Ndk::NodeComponent>();
 		auto& syncComponent = entity->GetComponent<SynchronizedComponent>();
 
-		createPacket.entityType = syncComponent.GetType();
-		createPacket.id = entity->GetId();
-		createPacket.name = syncComponent.GetName();
+		createPacket.prefabId = Nz::UInt32(syncComponent.GetPrefabId());
+		createPacket.entityId = entity->GetId();
 		createPacket.position = nodeComponent.GetPosition();
 		createPacket.rotation = nodeComponent.GetRotation();
+		createPacket.visualName = syncComponent.GetName();
 
 		if (entity->HasComponent<Ndk::PhysicsComponent3D>())
 		{

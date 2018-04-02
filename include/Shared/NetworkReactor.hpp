@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -27,7 +27,7 @@ namespace ewn
 	class NetworkReactor
 	{
 		public:
-			NetworkReactor(std::size_t firstId, const Nz::IpAddress& listenAddress, std::size_t maxClient);
+			NetworkReactor(std::size_t firstId, Nz::NetProtocol protocol, Nz::UInt16 port, std::size_t maxClient);
 			NetworkReactor(const NetworkReactor&) = delete;
 			NetworkReactor(NetworkReactor&&) = delete;
 			~NetworkReactor();

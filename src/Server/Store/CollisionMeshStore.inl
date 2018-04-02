@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Jérôme Leclercq
+// Copyright (C) 2018 Jérôme Leclercq
 // This file is part of the "Erewhon Server" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
@@ -16,6 +16,17 @@ namespace ewn
 	{
 		assert(IsEntryLoaded(entryId));
 		return m_collisionInfos[entryId].collider;
+	}
+
+	inline std::size_t CollisionMeshStore::GetEntryCount() const
+	{
+		return m_collisionInfos.size();
+	}
+
+	inline const std::string& CollisionMeshStore::GetEntryFilePath(std::size_t entryId) const
+	{
+		assert(IsEntryLoaded(entryId));
+		return m_collisionInfos[entryId].filePath;
 	}
 
 	inline bool CollisionMeshStore::IsEntryLoaded(std::size_t entryId) const
