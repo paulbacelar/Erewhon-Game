@@ -23,8 +23,8 @@ namespace ewn
 {
 	enum class PacketType
 	{
-		ArenaModels,
 		ArenaPrefabs,
+		ArenaSounds,
 		ArenaState,
 		BotMessage,
 		ChatMessage,
@@ -42,12 +42,20 @@ namespace ewn
 		PlayerChat,
 		PlayerMovement,
 		PlayerShoot,
+		PlaySound,
+		QuerySpaceshipInfo,
+		QuerySpaceshipList,
 		Register,
 		RegisterFailure,
 		RegisterSuccess,
+		SpaceshipInfo,
+		SpaceshipList,
 		SpawnSpaceship,
 		TimeSyncRequest,
-		TimeSyncResponse
+		TimeSyncResponse,
+		UpdateSpaceship,
+		UpdateSpaceshipFailure,
+		UpdateSpaceshipSuccess
 	};
 
 	template<PacketType PT> struct PacketTag
@@ -59,13 +67,13 @@ namespace ewn
 	{
 #define DeclarePacket(Type) struct Type : PacketTag<PacketType:: Type >
 
-		DeclarePacket(ArenaModels)
+		DeclarePacket(ArenaPrefabs)
 		{
 			CompressedUnsigned<Nz::UInt32> startId;
 
-			struct Model
+			struct Prefab
 			{
-				struct Piece
+				struct Model
 				{
 					CompressedUnsigned<Nz::UInt32> modelId;
 					Nz::Quaternionf rotation;
@@ -73,23 +81,38 @@ namespace ewn
 					Nz::Vector3f scale;
 				};
 
-				std::vector<Piece> pieces;
-			};
+				struct Sound
+				{
+					CompressedUnsigned<Nz::UInt32> soundId;
+					Nz::Vector3f position;
+				};
 
-			std::vector<Model> models;
-		};
+				struct VisualEffect
+				{
+					CompressedUnsigned<Nz::UInt32> effectNameId;
+					Nz::Quaternionf rotation;
+					Nz::Vector3f position;
+					Nz::Vector3f scale;
+				};
 
-		DeclarePacket(ArenaPrefabs)
-		{
-			CompressedUnsigned<Nz::UInt32> startId;
-
-			struct Prefab
-			{
-				CompressedUnsigned<Nz::UInt32> visualEffectId;
-				CompressedUnsigned<Nz::UInt32> collisionMeshId;
+				std::vector<Model> models;
+				std::vector<Sound> sounds;
+				std::vector<VisualEffect> visualEffects;
 			};
 
 			std::vector<Prefab> prefabs;
+		};
+
+		DeclarePacket(ArenaSounds)
+		{
+			CompressedUnsigned<Nz::UInt32> startId;
+
+			struct Sound
+			{
+				std::string filePath;
+			};
+
+			std::vector<Sound> sounds;
 		};
 
 		DeclarePacket(ArenaState)
@@ -199,6 +222,21 @@ namespace ewn
 		{
 		};
 
+		DeclarePacket(PlaySound)
+		{
+			CompressedUnsigned<Nz::UInt32> soundId;
+			Nz::Vector3f position;
+		};
+
+		DeclarePacket(QuerySpaceshipInfo)
+		{
+			std::string spaceshipName;
+		};
+
+		DeclarePacket(QuerySpaceshipList)
+		{
+		};
+
 		DeclarePacket(Register)
 		{
 			std::string login;
@@ -213,6 +251,21 @@ namespace ewn
 
 		DeclarePacket(RegisterSuccess)
 		{
+		};
+
+		DeclarePacket(SpaceshipInfo)
+		{
+			std::string hullModelPath;
+		};
+
+		DeclarePacket(SpaceshipList)
+		{
+			struct Spaceship
+			{
+				std::string name;
+			};
+
+			std::vector<Spaceship> spaceships;
 		};
 
 		DeclarePacket(SpawnSpaceship)
@@ -231,10 +284,25 @@ namespace ewn
 			CompressedUnsigned<Nz::UInt64> serverTime;
 		};
 
+		DeclarePacket(UpdateSpaceship)
+		{
+			std::string spaceshipName;
+			std::string newSpaceshipName;
+		};
+
+		DeclarePacket(UpdateSpaceshipFailure)
+		{
+			UpdateSpaceshipFailureReason reason;
+		};
+
+		DeclarePacket(UpdateSpaceshipSuccess)
+		{
+		};
+
 #undef DeclarePacket
 
-		void Serialize(PacketSerializer& serializer, ArenaModels& data);
 		void Serialize(PacketSerializer& serializer, ArenaPrefabs& data);
+		void Serialize(PacketSerializer& serializer, ArenaSounds& data);
 		void Serialize(PacketSerializer& serializer, ArenaState& data);
 		void Serialize(PacketSerializer& serializer, BotMessage& data);
 		void Serialize(PacketSerializer& serializer, ChatMessage& data);
@@ -252,12 +320,20 @@ namespace ewn
 		void Serialize(PacketSerializer& serializer, PlayerChat& data);
 		void Serialize(PacketSerializer& serializer, PlayerMovement& data);
 		void Serialize(PacketSerializer& serializer, PlayerShoot& data);
+		void Serialize(PacketSerializer& serializer, PlaySound& data);
+		void Serialize(PacketSerializer& serializer, QuerySpaceshipInfo& data);
+		void Serialize(PacketSerializer& serializer, QuerySpaceshipList& data);
 		void Serialize(PacketSerializer& serializer, Register& data);
 		void Serialize(PacketSerializer& serializer, RegisterFailure& data);
 		void Serialize(PacketSerializer& serializer, RegisterSuccess& data);
 		void Serialize(PacketSerializer& serializer, SpawnSpaceship& data);
+		void Serialize(PacketSerializer& serializer, SpaceshipInfo& data);
+		void Serialize(PacketSerializer& serializer, SpaceshipList& data);
 		void Serialize(PacketSerializer& serializer, TimeSyncRequest& data);
 		void Serialize(PacketSerializer& serializer, TimeSyncResponse& data);
+		void Serialize(PacketSerializer& serializer, UpdateSpaceship& data);
+		void Serialize(PacketSerializer& serializer, UpdateSpaceshipFailure& data);
+		void Serialize(PacketSerializer& serializer, UpdateSpaceshipSuccess& data);
 	}
 }
 

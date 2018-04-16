@@ -2,15 +2,13 @@
 // This file is part of the "Erewhon Shared" project
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#include <Client/States/AbstractState.hpp>
+#include <Client/States/Game/MainMenuState.hpp>
 
 namespace ewn
 {
-	void AbstractState::Leave(Ndk::StateMachine& /*fsm*/)
+	inline MainMenuState::MainMenuState(StateData& stateData, std::string playerName) :
+	AbstractState(stateData),
+	m_playerName(playerName)
 	{
-		for (Ndk::BaseWidget* widget : m_widgets)
-			widget->Destroy();
-
-		m_widgets.clear();
 	}
 }

@@ -10,21 +10,23 @@
 #include <Client/States/StateData.hpp>
 #include <NDK/BaseWidget.hpp>
 #include <NDK/State.hpp>
+#include <memory>
 #include <vector>
 
 namespace ewn
 {
-	class AbstractState : public Ndk::State
+	class AbstractState : public Ndk::State, public std::enable_shared_from_this<AbstractState>
 	{
 		public:
 			inline AbstractState(StateData& stateData);
 			~AbstractState() = default;
 
 		protected:
+			template<typename T, typename... Args> T* CreateWidget(Args&&... args);
+			inline void DestroyWidget(Ndk::BaseWidget* widget);
+
 			inline StateData& GetStateData();
 			inline const StateData& GetStateData() const;
-
-			template<typename T, typename... Args> T* CreateWidget(Args&&... args);
 
 			void Leave(Ndk::StateMachine& fsm) override;
 

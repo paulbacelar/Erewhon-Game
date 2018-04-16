@@ -38,6 +38,9 @@ namespace ewn
 			Arena(Arena&&) = delete;
 			~Arena();
 
+			template<typename T>
+			void BroadcastPacket(const T& packet, Player* exceptPlayer = nullptr);
+
 			const Ndk::EntityHandle& CreatePlayerSpaceship(Player* owner);
 			const Ndk::EntityHandle& CreatePlasmaProjectile(Player* owner, const Ndk::EntityHandle& emitter, const Nz::Vector3f& position, const Nz::Quaternionf& rotation);
 			const Ndk::EntityHandle& CreateTorpedo(Player* owner, const Ndk::EntityHandle& emitter, const Nz::Vector3f& position, const Nz::Quaternionf& rotation);
@@ -68,13 +71,18 @@ namespace ewn
 
 			void SendArenaData(Player* player);
 
+			struct PlayerData
+			{
+				Nz::UInt64 deathTime = 0;
+			};
+
 			Nz::UdpSocket m_debugSocket;
 			Ndk::EntityOwner m_attractionPoint;
 			Ndk::EntityOwner m_light;
 			Ndk::EntityOwner m_spaceball;
 			Ndk::EntityList m_scriptControlledEntities;
 			Ndk::World m_world;
-			std::unordered_map<Player*, Ndk::EntityHandle> m_players;
+			std::unordered_map<Player*, PlayerData> m_players;
 			std::vector<Packets::CreateEntity> m_createEntityCache;
 			ServerApplication* m_app;
 			float m_stateBroadcastAccumulator;

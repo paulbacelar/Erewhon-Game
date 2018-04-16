@@ -86,8 +86,6 @@ namespace ewn
 		const Ndk::EntityHandle& spaceship = CreateSpaceship(player->GetName(), player, 1, Nz::Vector3f::Zero(), Nz::Quaternionf::Identity());
 		spaceship->AddComponent<PlayerControlledComponent>(player);
 
-		m_players[player] = spaceship;
-
 		return spaceship;
 	}
 
@@ -124,9 +122,9 @@ namespace ewn
 
 	Player* Arena::FindPlayerByName(const std::string& name) const
 	{
-		for (auto [player, entity] : m_players)
+		for (auto&& [player, data] : m_players)
 		{
-			NazaraUnused(entity);
+			NazaraUnused(data);
 
 			if (player->GetName() == name)
 				return player;
@@ -174,6 +172,15 @@ namespace ewn
 			}
 		}*/
 
+		static Nz::UInt64 respawnTime = 5'000;
+
+		Nz::UInt64 now = ServerApplication::GetAppTime();
+		for (auto& [player, playerData] : m_players)
+		{
+			if (!player->GetControlledEntity() && now - playerData.deathTime > respawnTime)
+				player->UpdateControlledEntity(CreatePlayerSpaceship(player));
+		}
+
 		m_stateBroadcastAccumulator += elapsedTime;
 	}
 
@@ -181,71 +188,7 @@ namespace ewn
 	{
 		const Ndk::EntityHandle& newEntity = m_world.CreateEntity();
 
-		if (type == "spaceship")
-		{
-			Nz::SphereCollider3DRef collider = Nz::SphereCollider3D::New(4.f);
-			auto& collisionComponent = newEntity->AddComponent<Ndk::CollisionComponent3D>(collider);
-
-			auto& physComponent = newEntity->AddComponent<Ndk::PhysicsComponent3D>();
-			physComponent.SetMass(42.f);
-			physComponent.SetAngularDamping(Nz::Vector3f(0.4f));
-			physComponent.SetLinearDamping(0.25f);
-			physComponent.SetPosition(position);
-			physComponent.SetRotation(rotation);
-
-			auto& healthComponent = newEntity->AddComponent<HealthComponent>(1000);
-			healthComponent.OnDeath.Connect([this](HealthComponent* health, const Ndk::EntityHandle& attacker)
-			{
-				const Ndk::EntityHandle& entity = health->GetEntity();
-
-				// Reset health and position
-				health->Heal(health->GetMaxHealth());
-
-				auto& node = entity->GetComponent<Ndk::PhysicsComponent3D>();
-				node.SetPosition(Nz::Vector3f::Zero());
-
-				if (entity->HasComponent<PlayerControlledComponent>() && attacker->HasComponent<OwnerComponent>())
-				{
-					auto& shipOwner = entity->GetComponent<PlayerControlledComponent>();
-					auto& attackerOwner = attacker->GetComponent<OwnerComponent>();
-
-					Player* shipOwnerPlayer = shipOwner.GetOwner();
-					if (!shipOwnerPlayer)
-						return;
-
-					Player* attackerPlayer = attackerOwner.GetOwner();
-					Nz::String attackerName = (attackerPlayer) ? attackerPlayer->GetName() : "<Disconnected>";
-
-					DispatchChatMessage(attackerName + " has destroyed " + shipOwnerPlayer->GetName());
-				}
-			});
-
-			healthComponent.OnHealthChange.Connect([this](HealthComponent* health)
-			{
-				const Ndk::EntityHandle& entity = health->GetEntity();
-				if (!entity->HasComponent<PlayerControlledComponent>())
-					return;
-
-				Player* owner = entity->GetComponent<PlayerControlledComponent>().GetOwner();
-				if (!owner)
-					return;
-
-				Nz::UInt8 integrityPct = static_cast<Nz::UInt8>(Nz::Clamp(health->GetHealthPct() / 100.f * 255.f, 0.f, 255.f));
-
-				Packets::IntegrityUpdate integrityPacket;
-				integrityPacket.integrityValue = integrityPct;
-
-				owner->SendPacket(integrityPacket);
-			});
-
-			newEntity->AddComponent<InputComponent>();
-			newEntity->AddComponent<SynchronizedComponent>(5, type, name, true, 5);
-
-			auto& node = newEntity->AddComponent<Ndk::NodeComponent>();
-			node.SetPosition(position);
-			node.SetRotation(rotation);
-		}
-		else if (type == "earth")
+		if (type == "earth")
 		{
 			newEntity->AddComponent<Ndk::CollisionComponent3D>(Nz::SphereCollider3D::New(50.f));
 			newEntity->AddComponent<Ndk::NodeComponent>().SetPosition(position);
@@ -345,12 +288,6 @@ namespace ewn
 		{
 			const Ndk::EntityHandle& entity = health->GetEntity();
 
-			// Reset health and position
-			health->Heal(health->GetMaxHealth());
-
-			auto& node = entity->GetComponent<Ndk::PhysicsComponent3D>();
-			node.SetPosition(Nz::Vector3f::Zero());
-
 			if (entity->HasComponent<PlayerControlledComponent>() && attacker->HasComponent<OwnerComponent>())
 			{
 				auto& shipOwner = entity->GetComponent<PlayerControlledComponent>();
@@ -360,11 +297,18 @@ namespace ewn
 				if (!shipOwnerPlayer)
 					return;
 
+				auto it = m_players.find(shipOwnerPlayer);
+				assert(it != m_players.end());
+
+				it->second.deathTime = ServerApplication::GetAppTime();
+
 				Player* attackerPlayer = attackerOwner.GetOwner();
 				Nz::String attackerName = (attackerPlayer) ? attackerPlayer->GetName() : "<Disconnected>";
 
 				DispatchChatMessage(attackerName + " has destroyed " + shipOwnerPlayer->GetName());
 			}
+
+			entity->Kill();
 		});
 
 		healthComponent.OnHealthChange.Connect([this](HealthComponent* health)
@@ -421,60 +365,80 @@ namespace ewn
 		for (const auto& packet : m_createEntityCache)
 			player->SendPacket(packet);
 
-		m_players[player] = Ndk::EntityHandle::InvalidHandle;
-
 		DispatchChatMessage(player->GetName() + " has joined");
+
+		m_players.emplace(player, PlayerData{});
 	}
 
 	void Arena::SendArenaData(Player* player)
 	{
+		Packets::ArenaSounds arenaSoundsPacket;
+		arenaSoundsPacket.startId = 0;
+
+		arenaSoundsPacket.sounds.emplace_back();
+		arenaSoundsPacket.sounds.back().filePath = "sounds/laserTurretlow.ogg";
+
+		arenaSoundsPacket.sounds.emplace_back();
+		arenaSoundsPacket.sounds.back().filePath = "sounds/106733__crunchynut__sci-fi-loop-2.wav";
+
+		player->SendPacket(arenaSoundsPacket);
+
 		Packets::ArenaPrefabs arenaPrefabsPacket;
 		arenaPrefabsPacket.startId = 0;
 
 		// Earth
 		arenaPrefabsPacket.prefabs.emplace_back();
-		arenaPrefabsPacket.prefabs.back().collisionMeshId = m_app->GetNetworkStringStore().GetStringIndex("");
-		arenaPrefabsPacket.prefabs.back().visualEffectId = m_app->GetNetworkStringStore().GetStringIndex("earth");
+		arenaPrefabsPacket.prefabs.back().visualEffects.emplace_back();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().effectNameId = m_app->GetNetworkStringStore().GetStringIndex("earth");
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().rotation = Nz::Quaternionf::Identity();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().scale = Nz::Vector3f::Unit();
 
 		// Light
 		arenaPrefabsPacket.prefabs.emplace_back();
-		arenaPrefabsPacket.prefabs.back().collisionMeshId = m_app->GetNetworkStringStore().GetStringIndex("");
-		arenaPrefabsPacket.prefabs.back().visualEffectId = m_app->GetNetworkStringStore().GetStringIndex("light");
+		arenaPrefabsPacket.prefabs.back().visualEffects.emplace_back();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().effectNameId = m_app->GetNetworkStringStore().GetStringIndex("light");
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().rotation = Nz::Quaternionf::Identity();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().scale = Nz::Vector3f::Unit();
 
 		// Plasma beam
 		arenaPrefabsPacket.prefabs.emplace_back();
-		arenaPrefabsPacket.prefabs.back().collisionMeshId = m_app->GetNetworkStringStore().GetStringIndex("");
-		arenaPrefabsPacket.prefabs.back().visualEffectId = m_app->GetNetworkStringStore().GetStringIndex("plasmabeam");
+		arenaPrefabsPacket.prefabs.back().visualEffects.emplace_back();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().effectNameId = m_app->GetNetworkStringStore().GetStringIndex("plasmabeam");
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().rotation = Nz::Quaternionf::Identity();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().scale = Nz::Vector3f::Unit();
 
 		// Torpedo
 		arenaPrefabsPacket.prefabs.emplace_back();
-		arenaPrefabsPacket.prefabs.back().collisionMeshId = m_app->GetNetworkStringStore().GetStringIndex("");
-		arenaPrefabsPacket.prefabs.back().visualEffectId = m_app->GetNetworkStringStore().GetStringIndex("torpedo");
+		arenaPrefabsPacket.prefabs.back().visualEffects.emplace_back();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().effectNameId = m_app->GetNetworkStringStore().GetStringIndex("torpedo");
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().rotation = Nz::Quaternionf::Identity();
+		arenaPrefabsPacket.prefabs.back().visualEffects.back().scale = Nz::Vector3f::Unit();
 
-		player->SendPacket(arenaPrefabsPacket);
-
-		// Models
-
-		Packets::ArenaModels arenaModelsPacket;
-		arenaModelsPacket.startId = arenaPrefabsPacket.prefabs.size();
+		/*arenaPrefabsPacket.prefabs.back().sounds.emplace_back();
+		arenaPrefabsPacket.prefabs.back().sounds.back().soundId = 1;
+		arenaPrefabsPacket.prefabs.back().sounds.back().position = Nz::Vector3f::Zero();*/
 
 		// Ball
-		arenaModelsPacket.models.emplace_back();
-		arenaModelsPacket.models.back().pieces.emplace_back();
-		arenaModelsPacket.models.back().pieces.back().modelId = m_app->GetNetworkStringStore().GetStringIndex("ball/ball.obj");
-		arenaModelsPacket.models.back().pieces.back().position = Nz::Vector3f::Zero();
-		arenaModelsPacket.models.back().pieces.back().rotation = Nz::Quaternionf::Identity();
-		arenaModelsPacket.models.back().pieces.back().scale = Nz::Vector3f::Unit();
+		arenaPrefabsPacket.prefabs.emplace_back();
+		arenaPrefabsPacket.prefabs.back().models.emplace_back();
+		arenaPrefabsPacket.prefabs.back().models.back().modelId = m_app->GetNetworkStringStore().GetStringIndex("ball/ball.obj");
+		arenaPrefabsPacket.prefabs.back().models.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().models.back().rotation = Nz::Quaternionf::Identity();
+		arenaPrefabsPacket.prefabs.back().models.back().scale = Nz::Vector3f::Unit();
 
 		// Spaceship
-		arenaModelsPacket.models.emplace_back();
-		arenaModelsPacket.models.back().pieces.emplace_back();
-		arenaModelsPacket.models.back().pieces.back().modelId = m_app->GetNetworkStringStore().GetStringIndex("spaceship/spaceship.obj");
-		arenaModelsPacket.models.back().pieces.back().position = Nz::Vector3f::Zero();
-		arenaModelsPacket.models.back().pieces.back().rotation = Nz::EulerAnglesf(0.f, 90.f, 0.f);
-		arenaModelsPacket.models.back().pieces.back().scale = Nz::Vector3f(0.01f);
+		arenaPrefabsPacket.prefabs.emplace_back();
+		arenaPrefabsPacket.prefabs.back().models.emplace_back();
+		arenaPrefabsPacket.prefabs.back().models.back().modelId = m_app->GetNetworkStringStore().GetStringIndex("spaceship/spaceship.obj");
+		arenaPrefabsPacket.prefabs.back().models.back().position = Nz::Vector3f::Zero();
+		arenaPrefabsPacket.prefabs.back().models.back().rotation = Nz::EulerAnglesf(0.f, 90.f, 0.f);
+		arenaPrefabsPacket.prefabs.back().models.back().scale = Nz::Vector3f(0.01f);
 
-		player->SendPacket(arenaModelsPacket);
+		player->SendPacket(arenaPrefabsPacket);
 	}
 
 	bool Arena::HandlePlasmaProjectileCollision(const Nz::RigidBody3D& firstBody, const Nz::RigidBody3D& secondBody)
